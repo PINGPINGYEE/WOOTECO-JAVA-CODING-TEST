@@ -16,9 +16,9 @@ public class InputView {
 
     public List<OrderHistory> readMenuAndNumberOfOrders() {
         System.out.println("주문하실 메뉴와 개수를 알려주세요. (예: 티본스테이크-1,바비큐립-1)");
-        String input = Console.readLine();
+        String orderQuantity = Console.readLine();
 
-        return Utils.parseOrderInput(input);
+        return Utils.parseOrderInput(orderQuantity);
     }
 
 

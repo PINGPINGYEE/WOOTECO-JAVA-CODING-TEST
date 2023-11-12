@@ -32,10 +32,10 @@ public class Utils {
             }
 
             String menuName = standards[0].trim();
-            int quantity = stringToIntConverting(standards[1].trim());
+            int orderQuantity = stringToIntConverting(standards[1].trim());
 
             Menu menu = Menu.getByName(menuName);
-            orderItems.add(new OrderHistory(menu, quantity));
+            orderItems.add(new OrderHistory(menu, orderQuantity));
         }
 
         return orderItems;

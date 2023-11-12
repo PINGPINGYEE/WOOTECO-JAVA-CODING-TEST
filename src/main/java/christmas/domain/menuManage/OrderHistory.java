@@ -2,18 +2,22 @@ package christmas.domain.menuManage;
 
 public class OrderHistory {
     private final Menu menu;
-    private final int numberOfMenu;
+    private final int orderQuantity;
 
     public OrderHistory(Menu menu, int numberOfMenu) {
         this.menu = menu;
-        this.numberOfMenu = numberOfMenu;
+        this.orderQuantity = numberOfMenu;
     }
 
     public Menu getMenu() {
         return menu;
     }
 
-    public int getNumberOfMenu() {
-        return numberOfMenu;
+    public int getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public int calculateTotalPrice() {
+        return menu.getPrice() * orderQuantity;
     }
 }

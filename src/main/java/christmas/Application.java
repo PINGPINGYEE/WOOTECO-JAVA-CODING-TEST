@@ -1,6 +1,9 @@
 package christmas;
 
+import christmas.domain.dateManage.Day;
 import christmas.view.InputView;
+
+import static christmas.domain.dateManage.Day.calculateDay;
 
 public class Application {
     public static void main(String[] args) {

@@ -40,4 +40,3 @@ public enum Menu {
         throw new IllegalArgumentException("[ERROR] 유효하지 않은 메뉴 이름입니다.");
     }
 }
-

@@ -2,6 +2,9 @@ package christmas.view;
 
 import camp.nextstep.edu.missionutils.Console;
 import christmas.Utils;
+import christmas.domain.menuManage.OrderHistory;
+
+import java.util.List;
 
 public class InputView {
     public int readDate() {
@@ -10,4 +13,13 @@ public class InputView {
 
         return Utils.stringToIntConverting(date);
     }
+
+    public List<OrderHistory> readMenuAndNumberOfOrders() {
+        System.out.println("주문하실 메뉴와 개수를 알려주세요. (예: 티본스테이크-1,바비큐립-1)");
+        String input = Console.readLine();
+
+        return Utils.parseOrderInput(input);
+    }
+
+
 }

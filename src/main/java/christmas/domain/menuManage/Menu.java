@@ -25,10 +25,10 @@ public enum Menu {
     private final int price;
     private final MenuCategory category;
 
-    Menu(String name, int price) {
+    Menu(String name, int price, MenuCategory category) {
         this.name = name;
         this.price = price;
-        this.category = null; // category 초기화
+        this.category = category;
     }
 
     public String getName() {
@@ -39,10 +39,12 @@ public enum Menu {
         return price;
     }
 
-    Menu(String name, int price, MenuCategory category) {
-        this.name = name;
-        this.price = price;
-        this.category = category;
+    public boolean isMainMenu() {
+        return this.category == MenuCategory.MAIN;
+    }
+
+    public boolean isDessertMenu() {
+        return this.category == MenuCategory.DESSERT;
     }
 
     public static Menu getByName(String name) {

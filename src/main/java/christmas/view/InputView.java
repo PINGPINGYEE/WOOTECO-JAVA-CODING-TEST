@@ -5,6 +5,7 @@ import christmas.Utils;
 import christmas.domain.menuManage.OrderHistory;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InputView {
     public int readDate() {
@@ -14,11 +15,13 @@ public class InputView {
         return Utils.stringToIntConverting(date);
     }
 
-    public List<OrderHistory> readMenuAndNumberOfOrders() {
+    public List<OrderHistory> readMenuAndNumberOfOrders(int orderDate) {
         System.out.println("주문하실 메뉴와 개수를 알려주세요. (예: 티본스테이크-1,바비큐립-1)");
         String orderQuantity = Console.readLine();
 
-        return Utils.parseOrderInput(orderQuantity);
+        return Utils.parseOrderInput(orderQuantity, orderDate).stream()
+                .map(order -> new OrderHistory(order.getMenu(), order.getOrderQuantity(), orderDate))
+                .collect(Collectors.toList());
     }
 
 

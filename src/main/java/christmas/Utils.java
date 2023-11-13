@@ -21,7 +21,7 @@ public class Utils {
         }
     }
 
-    public static List<OrderHistory> parseOrderInput(String input) {
+    public static List<OrderHistory> parseOrderInput(String input, int orderDate) {
         String[] items = input.split(",");
         List<OrderHistory> orderItems = new ArrayList<>();
 
@@ -35,9 +35,10 @@ public class Utils {
             int orderQuantity = stringToIntConverting(standards[1].trim());
 
             Menu menu = Menu.getByName(menuName);
-            orderItems.add(new OrderHistory(menu, orderQuantity));
+            orderItems.add(new OrderHistory(menu, orderQuantity, orderDate));
         }
 
         return orderItems;
     }
+
 }

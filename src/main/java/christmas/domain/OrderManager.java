@@ -1,6 +1,7 @@
 package christmas.domain;
 
 import christmas.Utils;
+import christmas.domain.dateManage.Day;
 import christmas.domain.discountManage.Discount;
 import christmas.domain.menuManage.OrderHistory;
 
@@ -33,13 +34,22 @@ public class OrderManager {
         int totalBeforeDiscount = orders.stream()
                 .mapToInt(OrderHistory::calculateBeforeDiscountPrice)
                 .sum();
+        Day day = Day.calculateDay(orderDate);
+        int weekdayDiscount = 0;
+        int weekendDiscount = 0;
 
         int ddayDiscount = Discount.CHRISTMAS_DDAY_DISCOUNT.calculateDateRelatedDiscount(orderDate);
-        int weekdayDiscount = orders.stream()
-                .filter(o -> o.getMenu().isDessertMenu())
-                .mapToInt(o -> o.getOrderQuantity())
-                .sum() * 2023;
-        int weekendDiscount = 0; // 주말 할인은 이 경우 적용되지 않음
+        if (day.isWeekday()) {
+            weekdayDiscount = orders.stream()
+                    .filter(o -> o.getMenu().isDessertMenu())
+                    .mapToInt(o -> o.getOrderQuantity())
+                    .sum() * 2023;
+        } else if (day.isWeekend()) {
+            weekendDiscount = orders.stream()
+                    .filter(o -> o.getMenu().isMainMenu())
+                    .mapToInt(o -> o.getOrderQuantity())
+                    .sum() * 2023;
+        }
         int specialDiscount = Discount.SPECIAL_DISCOUNT.calculateDateRelatedDiscount(orderDate);
 
         int totalDiscount = ddayDiscount + weekdayDiscount + weekendDiscount + specialDiscount;

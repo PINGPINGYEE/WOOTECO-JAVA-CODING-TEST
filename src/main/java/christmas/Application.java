@@ -1,16 +1,24 @@
 package christmas;
 
-import christmas.domain.dateManage.Day;
+import christmas.domain.OrderManager;
+import christmas.domain.OrderResult;
 import christmas.view.InputView;
+import christmas.view.OutputView;
+import christmas.domain.menuManage.OrderHistory;
 
-import static christmas.domain.dateManage.Day.calculateDay;
+import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
         InputView inputView = new InputView();
+        OutputView outputView = new OutputView();
 
-        int date = inputView.readDate();
+        int orderDate = inputView.readDate();
+        List<OrderHistory> orders = inputView.readMenuAndNumberOfOrders(orderDate);
 
-        // TODO: 추가적인 프로그램 구현
+        OrderManager orderManager = new OrderManager(orders, orderDate);
+        OrderResult result = orderManager.processOrder();
+
+        outputView.displayOrderResult(result, orders);
     }
 }

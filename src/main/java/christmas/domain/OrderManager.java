@@ -7,6 +7,8 @@ import christmas.domain.menuManage.OrderHistory;
 
 import java.util.List;
 
+import static christmas.domain.menuManage.Menu.CHAMPAGNE;
+
 public class OrderManager {
     private List<OrderHistory> orders;
     private int orderDate;
@@ -56,11 +58,13 @@ public class OrderManager {
         boolean giftChampagne = Utils.isGiftEvent(orders);
 
         if (giftChampagne) {
-            totalDiscount += 25000; // 샴페인 가격 추가
+            totalDiscount += CHAMPAGNE.getPrice(); // 샴페인 가격 추가
         }
 
         int finalAmount = totalBeforeDiscount - totalDiscount;
 
-        return new OrderResult(finalAmount, totalDiscount, giftChampagne, orderDate, ddayDiscount, weekdayDiscount, weekendDiscount, specialDiscount);
+        OrderResult result = new OrderResult(finalAmount, totalDiscount, giftChampagne, orderDate, ddayDiscount, weekdayDiscount, weekendDiscount, specialDiscount);
+        result.determineEventBadge();
+        return result;
     }
 }

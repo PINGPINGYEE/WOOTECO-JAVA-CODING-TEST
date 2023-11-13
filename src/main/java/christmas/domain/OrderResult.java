@@ -1,5 +1,6 @@
 package christmas.domain;
 
+import christmas.domain.badgeManage.Badge;
 import christmas.domain.menuManage.OrderHistory;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class OrderResult {
     private int weekdayDiscount;
     private int weekendDiscount;
     private int specialDiscount;
+    private Badge eventBadge;
 
     public OrderResult(int finalAmount, int totalDiscount, boolean giftChampagne, int orderDate, int ddayDiscount, int weekdayDiscount, int weekendDiscount, int specialDiscount) {
         this.finalAmount = finalAmount;
@@ -69,4 +71,11 @@ public class OrderResult {
         return specialDiscount;
     }
 
+    public Badge getEventBadge() {
+        return eventBadge;
+    }
+
+    public void determineEventBadge() {
+        this.eventBadge = Badge.getBadgeForDiscount(this.totalDiscount);
+    }
 }

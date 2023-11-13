@@ -27,15 +27,30 @@ public class OrderManager {
         return totalDiscount;
     }
 
+    // OrderManager 클래스 내부
+
     public OrderResult processOrder() {
         int totalBeforeDiscount = orders.stream()
                 .mapToInt(OrderHistory::calculateBeforeDiscountPrice)
                 .sum();
-        int totalDiscount = calculateTotalDiscount();
+
+        int ddayDiscount = Discount.CHRISTMAS_DDAY_DISCOUNT.calculateDateRelatedDiscount(orderDate);
+        int weekdayDiscount = orders.stream()
+                .filter(o -> o.getMenu().isDessertMenu())
+                .mapToInt(o -> o.getOrderQuantity())
+                .sum() * 2023;
+        int weekendDiscount = 0; // 주말 할인은 이 경우 적용되지 않음
+        int specialDiscount = Discount.SPECIAL_DISCOUNT.calculateDateRelatedDiscount(orderDate);
+
+        int totalDiscount = ddayDiscount + weekdayDiscount + weekendDiscount + specialDiscount;
         boolean giftChampagne = Utils.isGiftEvent(orders);
 
-        int finalAmount = totalBeforeDiscount - totalDiscount;
-        return new OrderResult(finalAmount, totalDiscount, giftChampagne, orderDate); // orderDate 추가
-    }
+        if (giftChampagne) {
+            totalDiscount += 25000; // 샴페인 가격 추가
+        }
 
+        int finalAmount = totalBeforeDiscount - totalDiscount;
+
+        return new OrderResult(finalAmount, totalDiscount, giftChampagne, orderDate, ddayDiscount, weekdayDiscount, weekendDiscount, specialDiscount);
+    }
 }

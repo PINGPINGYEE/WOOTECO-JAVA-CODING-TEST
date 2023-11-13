@@ -36,6 +36,15 @@ public enum Discount {
         public int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus) {
             return 0;
         }
+    }, WEEKEND_DISCOUNT {
+        @Override
+        public int calculateDateRelatedDiscount(int orderDate) {
+            return 0; // 주말 할인은 날짜 관련 할인이 아니므로 0을 반환
+        }
+        @Override
+        public int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus) {
+            return calculateWeekendDiscount(orderDate, orderMenus); // 주말 할인 로직
+        }
     };
 
 

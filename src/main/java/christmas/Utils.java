@@ -41,4 +41,11 @@ public class Utils {
         return orderItems;
     }
 
+    public static boolean isGiftEvent(List<OrderHistory> orders) {
+        int totalBeforeDiscount = orders.stream()
+                .mapToInt(OrderHistory::calculateBeforeDiscountPrice)
+                .sum();
+        return totalBeforeDiscount >= 120000;
+    }
+
 }

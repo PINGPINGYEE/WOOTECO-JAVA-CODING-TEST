@@ -30,11 +30,11 @@ public enum Discount {
     SPECIAL_DISCOUNT {
         @Override
         public int calculateDateRelatedDiscount(int orderDate) {
-            return 0;
+            return calculateSpecialDiscount(orderDate);
         }
         @Override
         public int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus) {
-            return calculateWeekendDiscount(orderDate, orderMenus);
+            return 0;
         }
     };
 

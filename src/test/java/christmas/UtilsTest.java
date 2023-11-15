@@ -1,20 +1,20 @@
-package christmas.view;
+package christmas;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InputViewTest {
+class UtilsTest {
 
     @Test
-    void readDate() {
+    void stringToIntConverting() {
     }
 
     @Test
-    void readMenuAndNumberOfOrders() {
+    void isTotalQuantityExceeded() {
     }
 
     @Test
-    void areAllDrinks() {
+    void isGiftEvent() {
     }
 }

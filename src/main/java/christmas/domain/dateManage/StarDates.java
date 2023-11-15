@@ -20,4 +20,3 @@ public enum StarDates {
                 .anyMatch(specialDay -> specialDay.getDayOfMonth() == day);
     }
 }
-

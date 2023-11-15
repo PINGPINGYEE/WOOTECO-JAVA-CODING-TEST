@@ -19,6 +19,8 @@ public class OrderResult {
         this.weekdayDiscount = weekdayDiscount;
         this.weekendDiscount = weekendDiscount;
         this.specialDiscount = specialDiscount;
+
+        determineEventBadge();
     }
 
     public int getTotalDiscount() {
@@ -53,4 +55,7 @@ public class OrderResult {
         return eventBadge;
     }
 
+    public void determineEventBadge() {
+        this.eventBadge = Badge.getBadgeForDiscount(this.totalDiscount);
+    }
 }

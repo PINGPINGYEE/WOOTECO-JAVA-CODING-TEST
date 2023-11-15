@@ -10,6 +10,7 @@ import static christmas.domain.menuManage.Menu.CHAMPAGNE;
 
 public class OutputView {
     private static final String LINE_SEPARATOR = System.lineSeparator();
+
     public void displayOrderResult(OrderResult result, List<OrderHistory> orders) {
         System.out.println("12월 " + result.getOrderDate() + "일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
         displayOrderMenu(orders);

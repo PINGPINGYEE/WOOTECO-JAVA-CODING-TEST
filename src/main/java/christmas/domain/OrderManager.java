@@ -13,6 +13,7 @@ import static christmas.domain.menuManage.Menu.CHAMPAGNE;
 public class OrderManager {
     private final List<OrderHistory> orders;
     private final int orderDate;
+    private final int saleBeginPrice = 10000;
 
     public OrderManager(List<OrderHistory> orders, int orderDate) {
         this.orders = orders;
@@ -34,10 +35,20 @@ public class OrderManager {
 
     public OrderResult processOrder() {
         Day day = Day.calculateDay(orderDate);
-        LastDiscountType discounts = calculateDiscount(day, orderDate, orders);
+        LastDiscountType discounts = new LastDiscountType(0, 0, 0, 0);
         boolean isGiftEvent = Utils.isGiftEvent(orders);
+
+        int totalBeforeDiscount = orders.stream()
+                .mapToInt(OrderHistory::calculateBeforeDiscountPrice)
+                .sum();
+
+        if (totalBeforeDiscount >= saleBeginPrice) {
+            discounts = calculateDiscount(day, orderDate, orders);
+        }
+
         return createOrderResult(discounts, isGiftEvent);
     }
+
 
     private LastDiscountType calculateDiscount(Day day, int orderDate, List<OrderHistory> orders) {
         int ddayDiscount = CHRISTMAS_DDAY_DISCOUNT.calculateDateRelatedDiscount(orderDate);

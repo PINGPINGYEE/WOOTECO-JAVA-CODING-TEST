@@ -22,11 +22,9 @@ class DiscountCalcuatorTest {
     @Test
     void testCalculateSpecialDiscount() {
 
-        // 특별 할인 날짜에 대한 할인이 적용되는 경우
         assertEquals(1000, calculateSpecialDiscount(3), "3 is special day");
         assertEquals(1000, calculateSpecialDiscount(10), "10 is special day");
 
-        // 특별 할인 날짜가 아닌 경우
         assertEquals(0, calculateSpecialDiscount(4), "4 is not special day");
     }
 

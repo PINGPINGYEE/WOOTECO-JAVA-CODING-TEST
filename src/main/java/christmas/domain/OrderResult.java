@@ -3,7 +3,7 @@ import christmas.domain.badgeManage.Badge;
 
 public class OrderResult {
     private int totalDiscount;
-    private boolean giftChampagne;
+    private boolean giftEvent;
     private int orderDate;
     private int ddayDiscount;
     private int weekdayDiscount;
@@ -11,9 +11,9 @@ public class OrderResult {
     private int specialDiscount;
     private Badge eventBadge;
 
-    public OrderResult(int totalDiscount, boolean giftChampagne, int orderDate, int ddayDiscount, int weekdayDiscount, int weekendDiscount, int specialDiscount) {
+    public OrderResult(int totalDiscount, boolean giftEvent, int orderDate, int ddayDiscount, int weekdayDiscount, int weekendDiscount, int specialDiscount) {
         this.totalDiscount = totalDiscount;
-        this.giftChampagne = giftChampagne;
+        this.giftEvent = giftEvent;
         this.orderDate = orderDate;
         this.ddayDiscount = ddayDiscount;
         this.weekdayDiscount = weekdayDiscount;
@@ -28,7 +28,7 @@ public class OrderResult {
     }
 
     public boolean isGiftEvent() {
-        return giftChampagne;
+        return giftEvent;
     }
 
     public int getOrderDate() {

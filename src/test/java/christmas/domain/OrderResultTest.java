@@ -7,40 +7,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OrderResultTest {
+    private static final int TOTAL_DISCOUNT = 5000;
+    private static final boolean GIFT_EVENT = true;
+    private static final int ORDER_DATE = 15;
+    private static final int DDAY_DISCOUNT = 1000;
+    private static final int WEEKDAY_DISCOUNT = 2000;
+    private static final int WEEKEND_DISCOUNT = 1500;
+    private static final int SPECIAL_DISCOUNT = 500;
 
     @Test
     void testGetTotalDiscount() {
-        OrderResult result = new OrderResult(5000, true, 15, 1000, 2000, 1500, 500);
-        assertEquals(5000, result.getTotalDiscount(), "총 할인 금액이 올바르지 않습니다.");
+        OrderResult result = new OrderResult(TOTAL_DISCOUNT, GIFT_EVENT, ORDER_DATE, DDAY_DISCOUNT, WEEKDAY_DISCOUNT, WEEKEND_DISCOUNT, SPECIAL_DISCOUNT);
+        assertEquals(5000, result.getTotalDiscount(), "total discount is not correct.");
     }
 
     @Test
     void testIsGiftEvent() {
-        OrderResult result = new OrderResult(5000, true, 15, 1000, 2000, 1500, 500);
-        assertTrue(result.isGiftEvent(), "선물 이벤트 여부가 올바르지 않습니다.");
+        OrderResult result = new OrderResult(TOTAL_DISCOUNT, GIFT_EVENT, ORDER_DATE, DDAY_DISCOUNT, WEEKDAY_DISCOUNT, WEEKEND_DISCOUNT, SPECIAL_DISCOUNT);
+        assertTrue(result.isGiftEvent(), "gift event is not correct.");
     }
 
 
     @Test
     void testGetOrderDate() {
-        OrderResult result = new OrderResult(5000, true, 15, 1000, 2000, 1500, 500);
-        assertEquals(15, result.getOrderDate(), "주문 날짜가 올바르지 않습니다.");
+        OrderResult result = new OrderResult(TOTAL_DISCOUNT, GIFT_EVENT, ORDER_DATE, DDAY_DISCOUNT, WEEKDAY_DISCOUNT, WEEKEND_DISCOUNT, SPECIAL_DISCOUNT);
+        assertEquals(15, result.getOrderDate(), "order date is not correct.");
     }
 
     @Test
     void testGetDdayDiscount() {
-        OrderResult result = new OrderResult(5000, true, 15, 1000, 2000, 1500, 500);
-        assertEquals(1000, result.getDdayDiscount(), "D-day 할인 금액이 올바르지 않습니다.");
+        OrderResult result = new OrderResult(TOTAL_DISCOUNT, GIFT_EVENT, ORDER_DATE, DDAY_DISCOUNT, WEEKDAY_DISCOUNT, WEEKEND_DISCOUNT, SPECIAL_DISCOUNT);
+        assertEquals(1000, result.getDdayDiscount(), "DDay Sale is not correct.");
     }
 
     @Test
     void testGetEventBadge() {
-        OrderResult result = new OrderResult(5000, true, 15, 1000, 2000, 1500, 500);
-        // 이벤트 뱃지 설정 로직에 따라 테스트를 작성합니다.
-        // 예를 들어, 일정 금액 이상일 경우 특정 뱃지를 반환하는 경우:
-        result.getEventBadge(); // 뱃지 결정 로직 호출
-        assertEquals(Badge.별, result.getEventBadge(), "이벤트 뱃지가 올바르지 않습니다.");
+        OrderResult result = new OrderResult(TOTAL_DISCOUNT, GIFT_EVENT, ORDER_DATE, DDAY_DISCOUNT, WEEKDAY_DISCOUNT, WEEKEND_DISCOUNT, SPECIAL_DISCOUNT);
+        result.getEventBadge();
+        assertEquals(Badge.별, result.getEventBadge(), "Badge is not correct.");
     }
-
-
 }

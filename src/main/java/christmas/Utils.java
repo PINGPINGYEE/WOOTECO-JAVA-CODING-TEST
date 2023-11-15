@@ -37,7 +37,7 @@ public class Utils {
 
 
 
-    public static boolean isTotalQuantityExceeded(List<OrderHistory> orders) {
+    public static boolean isTotalQuantityExceed(List<OrderHistory> orders) {
         int totalQuantity = orders.stream()
                 .mapToInt(OrderHistory::getOrderQuantity)
                 .sum();

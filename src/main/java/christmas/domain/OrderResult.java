@@ -53,7 +53,4 @@ public class OrderResult {
         return eventBadge;
     }
 
-    public void determineEventBadge() {
-        this.eventBadge = Badge.getBadgeForDiscount(this.totalDiscount);
-    }
 }

@@ -12,20 +12,13 @@ public class OutputView {
     private static final String LINE_SEPARATOR = System.lineSeparator();
     public void displayOrderResult(OrderResult result, List<OrderHistory> orders) {
         System.out.println("12월 " + result.getOrderDate() + "일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
-
         displayOrderMenu(orders);
-
         int totalBeforeDiscount = calculateTotalBeforeDiscount(orders);
         System.out.println("<할인 전 총주문 금액>"+ LINE_SEPARATOR + String.format("%,d원", totalBeforeDiscount));
-
         System.out.println("<증정 메뉴>"+ LINE_SEPARATOR + getGiftMenu(result));
-
         System.out.println("<혜택 내역>"+ LINE_SEPARATOR + getDiscountDetails(result));
-
         System.out.println("<총혜택 금액>"+ LINE_SEPARATOR + getFormattedTotalDiscount(result));
-
         System.out.println("<할인 후 예상 결제 금액>"+ LINE_SEPARATOR + getFormattedLastAmount(totalBeforeDiscount, result));
-
         System.out.println("<12월 이벤트 배지>"+ LINE_SEPARATOR + getEventBadgeString(result.getEventBadge()));
     }
 

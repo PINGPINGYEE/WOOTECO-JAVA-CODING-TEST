@@ -2,69 +2,83 @@ package christmas.domain;
 
 import christmas.Utils;
 import christmas.domain.dateManage.Day;
-import christmas.domain.discountManage.Discount;
 import christmas.domain.menuManage.OrderHistory;
+import christmas.view.InputView;
+import christmas.view.OutputView;
 
 import java.util.List;
-
+import static christmas.domain.discountManage.Discount.*;
 import static christmas.domain.menuManage.Menu.CHAMPAGNE;
 
 public class OrderManager {
-    private List<OrderHistory> orders;
-    private int orderDate;
+    private final List<OrderHistory> orders;
+    private final int orderDate;
 
     public OrderManager(List<OrderHistory> orders, int orderDate) {
         this.orders = orders;
         this.orderDate = orderDate;
     }
 
-    public int calculateTotalDiscount() {
-        int totalDiscount = 0;
+    public static void startOrder() {
+        InputView inputView = new InputView();
+        OutputView outputView = new OutputView();
 
-        for (OrderHistory order : orders) {
-            totalDiscount += Discount.CHRISTMAS_DDAY_DISCOUNT.calculateDateRelatedDiscount(orderDate);
-            totalDiscount += Discount.WEEKDAY_DISCOUNT.calculateMenuRelatedDiscount(orderDate, List.of(order.getMenu()));
-            totalDiscount += Discount.SPECIAL_DISCOUNT.calculateDateRelatedDiscount(orderDate);
-        }
+        int orderDate = inputView.readDate();
+        List<OrderHistory> orders = inputView.readMenuAndNumberOfOrders(orderDate);
 
-        return totalDiscount;
+        OrderManager orderManager = new OrderManager(orders, orderDate);
+        OrderResult result = orderManager.processOrder();
+
+        outputView.displayOrderResult(result, orders);
     }
 
-    // OrderManager 클래스 내부
-
     public OrderResult processOrder() {
-        int totalBeforeDiscount = orders.stream()
-                .mapToInt(OrderHistory::calculateBeforeDiscountPrice)
-                .sum();
         Day day = Day.calculateDay(orderDate);
-        int weekdayDiscount = 0;
-        int weekendDiscount = 0;
+        LastDiscountType discounts = calculateDiscount(day, orderDate, orders);
+        boolean isGiftEvent = Utils.isGiftEvent(orders);
+        return createOrderResult(discounts, isGiftEvent);
+    }
 
-        int ddayDiscount = Discount.CHRISTMAS_DDAY_DISCOUNT.calculateDateRelatedDiscount(orderDate);
-        if (day.isWeekday()) {
-            weekdayDiscount = orders.stream()
-                    .filter(o -> o.getMenu().isDessertMenu())
-                    .mapToInt(o -> o.getOrderQuantity())
-                    .sum() * 2023;
-        } else if (day.isWeekend()) {
-            weekendDiscount = orders.stream()
-                    .filter(o -> o.getMenu().isMainMenu())
-                    .mapToInt(o -> o.getOrderQuantity())
-                    .sum() * 2023;
+    private LastDiscountType calculateDiscount(Day day, int orderDate, List<OrderHistory> orders) {
+        int ddayDiscount = CHRISTMAS_DDAY_DISCOUNT.calculateDateRelatedDiscount(orderDate);
+        int weekdayDiscount = WEEKDAY_DISCOUNT.calculateDayRelatedDiscount(day, orders);
+        int weekendDiscount = WEEKEND_DISCOUNT.calculateDayRelatedDiscount(day, orders);
+        int specialDiscount = SPECIAL_DISCOUNT.calculateDateRelatedDiscount(orderDate);
+
+        return new LastDiscountType(ddayDiscount, weekdayDiscount, weekendDiscount, specialDiscount);
+    }
+
+    private OrderResult createOrderResult(LastDiscountType discounts, boolean isGiftEvent) {
+        int totalDiscount = discounts.getTotalDiscount();
+        if (isGiftEvent) totalDiscount += CHAMPAGNE.getPrice();
+
+        return new OrderResult(totalDiscount, isGiftEvent, orderDate,
+                discounts.getDdayDiscount(),
+                discounts.getWeekdayDiscount(),
+                discounts.getWeekendDiscount(),
+                discounts.getSpecialDiscount());
+    }
+
+    private static class LastDiscountType {
+        private final int ddayDiscount;
+        private final int weekdayDiscount;
+        private final int weekendDiscount;
+        private final int specialDiscount;
+
+        public LastDiscountType(int ddayDiscount, int weekdayDiscount, int weekendDiscount, int specialDiscount) {
+            this.ddayDiscount = ddayDiscount;
+            this.weekdayDiscount = weekdayDiscount;
+            this.weekendDiscount = weekendDiscount;
+            this.specialDiscount = specialDiscount;
         }
-        int specialDiscount = Discount.SPECIAL_DISCOUNT.calculateDateRelatedDiscount(orderDate);
 
-        int totalDiscount = ddayDiscount + weekdayDiscount + weekendDiscount + specialDiscount;
-        boolean giftChampagne = Utils.isGiftEvent(orders);
-
-        if (giftChampagne) {
-            totalDiscount += CHAMPAGNE.getPrice(); // 샴페인 가격 추가
+        public int getTotalDiscount() {
+            return ddayDiscount + weekdayDiscount + weekendDiscount + specialDiscount;
         }
 
-        int finalAmount = totalBeforeDiscount - totalDiscount;
-
-        OrderResult result = new OrderResult(finalAmount, totalDiscount, giftChampagne, orderDate, ddayDiscount, weekdayDiscount, weekendDiscount, specialDiscount);
-        result.determineEventBadge();
-        return result;
+        public int getDdayDiscount() { return ddayDiscount; }
+        public int getWeekdayDiscount() { return weekdayDiscount; }
+        public int getWeekendDiscount() { return weekendDiscount; }
+        public int getSpecialDiscount() { return specialDiscount; }
     }
 }

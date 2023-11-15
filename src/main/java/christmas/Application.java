@@ -8,17 +8,12 @@ import christmas.domain.menuManage.OrderHistory;
 
 import java.util.List;
 
+import static christmas.domain.OrderManager.startOrder;
+
 public class Application {
     public static void main(String[] args) {
-        InputView inputView = new InputView();
-        OutputView outputView = new OutputView();
-
-        int orderDate = inputView.readDate();
-        List<OrderHistory> orders = inputView.readMenuAndNumberOfOrders(orderDate);
-
-        OrderManager orderManager = new OrderManager(orders, orderDate);
-        OrderResult result = orderManager.processOrder();
-
-        outputView.displayOrderResult(result, orders);
+        startOrder();
     }
+
+
 }

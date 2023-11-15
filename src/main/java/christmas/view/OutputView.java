@@ -24,7 +24,7 @@ public class OutputView {
 
         System.out.println("<총혜택 금액>"+ LINE_SEPARATOR + getFormattedTotalDiscount(result));
 
-        System.out.println("<할인 후 예상 결제 금액>"+ LINE_SEPARATOR + getFormattedFinalAmount(totalBeforeDiscount, result));
+        System.out.println("<할인 후 예상 결제 금액>"+ LINE_SEPARATOR + getFormattedLastAmount(totalBeforeDiscount, result));
 
         System.out.println("<12월 이벤트 배지>"+ LINE_SEPARATOR + getEventBadgeString(result.getEventBadge()));
     }
@@ -50,7 +50,9 @@ public class OutputView {
     }
 
     private String getGiftMenu(OrderResult result) {
-        return result.isGiftEvent() ? "샴페인 1개" : "없음";  // 수정해야함!!
+        if(result.isGiftEvent()) {
+            return "샴페인 1개";
+        } return "없음";
     }
 
     private String getDiscountDetails(OrderResult result) {
@@ -71,12 +73,12 @@ public class OutputView {
     }
 
 
-    private String getFormattedFinalAmount(int totalBeforeDiscount, OrderResult result) {
-        int finalAmount = totalBeforeDiscount - result.getTotalDiscount();
+    private String getFormattedLastAmount(int totalBeforeDiscount, OrderResult result) {
+        int lastAmount = totalBeforeDiscount - result.getTotalDiscount();
         if (result.isGiftEvent()) {
-            finalAmount += CHAMPAGNE.getPrice();  // 샴페인 가격 추가
+            lastAmount += CHAMPAGNE.getPrice();  // 샴페인 가격 추가
         }
-        return String.format("%,d원", finalAmount);
+        return String.format("%,d원", lastAmount);
     }
 
 }

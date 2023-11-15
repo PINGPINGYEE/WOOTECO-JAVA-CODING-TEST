@@ -9,8 +9,8 @@ public enum Day {
     private static List<Day> days = new ArrayList<>(List.of(values()));
 
     public static Day calculateDay(int dayOfMonth) {
-        int targetIndex = (dayOfMonth - 1) % days.size();
-        return days.get(targetIndex);
+        int targetDay = (dayOfMonth - 1) % days.size();
+        return days.get(targetDay);
     }
 
     public boolean isWeekend() {

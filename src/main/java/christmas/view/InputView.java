@@ -8,7 +8,6 @@ import christmas.domain.menuManage.OrderHistory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class InputView {
 
@@ -17,7 +16,7 @@ public class InputView {
         try {
             System.out.println("12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)");
             String date = Console.readLine();
-            return Utils.stringToIntConverting(date);
+            return Utils.stringToIntConverting(date, "dateExcpetion");
         } catch (IllegalArgumentException e) {
             System.out.println("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
             return readDate();
@@ -34,11 +33,15 @@ public class InputView {
                 throw new IllegalArgumentException("[ERROR] 음료수만 주문할 수 없습니다.");
             }
             return orders;
+        } catch (NumberFormatException e) {
+            System.out.println("[ERROR] 유효하지 않은 주문 수량입니다. 다시 입력해 주세요.");
+            return readMenuAndNumberOfOrders(orderDate);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            return readMenuAndNumberOfOrders(orderDate); // 재귀 호출을 통해 다시 입력받음
+            return readMenuAndNumberOfOrders(orderDate);
         }
     }
+
 
     boolean areAllDrinks(List<OrderHistory> orders) {
         return orders.stream().allMatch(order -> order.getMenu().getCategory() == MenuCategory.DRINK);
@@ -47,26 +50,33 @@ public class InputView {
     private List<OrderHistory> parseOrderInput(String input, int orderDate) {
         String[] items = input.split(",");
         List<OrderHistory> orderItems = new ArrayList<>();
+        List<String> menuNames = new ArrayList<>();
 
         for (String item : items) {
             String[] standards = item.split("-");
             if (standards.length != 2) {
-                throw new IllegalArgumentException("[ERROR] 잘못된 주문 형식입니다.");
+                throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
             }
 
             String menuName = standards[0].trim();
+            if (menuNames.contains(menuName)) {
+                throw new IllegalArgumentException("[ERROR] 메뉴는 중복될 수 없습니다.");
+            }
+            menuNames.add(menuName);
+
             int orderQuantity;
             try {
-                orderQuantity = Utils.stringToIntConverting(standards[1].trim());
+                orderQuantity = Utils.stringToIntConverting(standards[1].trim(), "quantityException");
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문 수량입니다.");
+                throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
             }
 
-            Menu menu = Menu.getByName(menuName); // 이 부분에서 IllegalArgumentException 발생 가능
+            Menu menu = Menu.getByName(menuName);
             orderItems.add(new OrderHistory(menu, orderQuantity, orderDate));
         }
 
         return orderItems;
     }
+
 
 }

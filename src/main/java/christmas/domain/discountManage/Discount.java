@@ -1,6 +1,7 @@
 package christmas.domain.discountManage;
 
-import christmas.domain.menuManage.Menu;
+import christmas.domain.dateManage.Day;
+import christmas.domain.menuManage.OrderHistory;
 
 import java.util.List;
 
@@ -12,19 +13,25 @@ public enum Discount {
         public int calculateDateRelatedDiscount(int orderDate) {
             return calculateChristmasDdayDiscount(orderDate);
         }
-        @Override
-        public int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus) {
+        public int calculateDayRelatedDiscount(Day day, List<OrderHistory> orders) {
             return 0;
         }
     },
+
     WEEKDAY_DISCOUNT {
-        @Override
         public int calculateDateRelatedDiscount(int orderDate) {
             return 0;
         }
-        @Override
-        public int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus) {
-            return calculateWeekdayDiscount(orderDate, orderMenus);
+        public int calculateDayRelatedDiscount(Day day, List<OrderHistory> orders) {
+            return calculateWeekdayDiscount(day, orders);
+        }
+    },
+    WEEKEND_DISCOUNT {
+        public int calculateDateRelatedDiscount(int orderDate) {
+            return 0;
+        }
+        public int calculateDayRelatedDiscount(Day day, List<OrderHistory> orders) {
+            return calculateWeekendDiscount(day, orders);
         }
     },
     SPECIAL_DISCOUNT {
@@ -32,24 +39,12 @@ public enum Discount {
         public int calculateDateRelatedDiscount(int orderDate) {
             return calculateSpecialDiscount(orderDate);
         }
-        @Override
-        public int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus) {
+        public int calculateDayRelatedDiscount(Day day, List<OrderHistory> orders) {
             return 0;
         }
-    }, WEEKEND_DISCOUNT {
-        @Override
-        public int calculateDateRelatedDiscount(int orderDate) {
-            return 0; // 주말 할인은 날짜 관련 할인이 아니므로 0을 반환
-        }
-        @Override
-        public int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus) {
-            return calculateWeekendDiscount(orderDate, orderMenus); // 주말 할인 로직
-        }
-    };
-
-
+    }
+    ;
 
     public abstract int calculateDateRelatedDiscount(int orderDate);
-
-    public abstract int calculateMenuRelatedDiscount(int orderDate, List<Menu> orderMenus);
+    public abstract int calculateDayRelatedDiscount(Day day, List<OrderHistory> orders);
 }

@@ -36,13 +36,11 @@ class OrderManagerTest {
 
     @Test
     public void testOrderQuantityIsLessThanOne() {
-        // 주문 수량이 0인 주문 내역을 생성
         OrderHistory order = new OrderHistory(Menu.MUSHROOM_SOUP, 0, 1);
 
         try {
             new OrderManager(Arrays.asList(order), 1);
         } catch (IllegalArgumentException e) {
-            // 예외 메시지에 "[ERROR]" 문자열이 포함되어 있는지 확인
             assertTrue(e.getMessage().contains("[ERROR]"));
         }
     }

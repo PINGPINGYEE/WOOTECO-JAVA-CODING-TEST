@@ -7,11 +7,6 @@ import christmas.domain.menuManage.OrderHistory;
 import java.util.List;
 
 public class DiscountCalcuator {
-    private static int getTotalOrderAmount(List<OrderHistory> orders) {
-        return orders.stream()
-                .mapToInt(OrderHistory::calculateBeforeDiscountPrice)
-                .sum();
-    }
 
     public static int calculateChristmasDdayDiscount(int date) {
         if (date > 25) {

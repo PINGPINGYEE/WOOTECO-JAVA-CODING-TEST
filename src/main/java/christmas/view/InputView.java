@@ -32,6 +32,9 @@ public class InputView {
             if (areAllDrinks(orders)) {
                 throw new IllegalArgumentException("[ERROR] 음료수만 주문할 수 없습니다.");
             }
+            if (Utils.isTotalQuantityExceeded(orders)) {
+                throw new IllegalArgumentException("[ERROR] 총 주문 수량은 20을 초과할 수 없습니다.");
+            }
             return orders;
         } catch (NumberFormatException e) {
             System.out.println("[ERROR] 유효하지 않은 주문 수량입니다. 다시 입력해 주세요.");

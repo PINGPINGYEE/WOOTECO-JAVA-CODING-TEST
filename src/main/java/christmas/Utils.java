@@ -20,22 +20,29 @@ public class Utils {
 
     private static void isOkayNumber(int number, String validationContext) {
         if (validationContext.equals("dateException") && (number < 1 || number > maxDate)) {
-            throw new IllegalArgumentException("[ERROR] 날짜는 1일에서 31일 사이의 정수여야 합니다.");
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
         } else if (validationContext.equals("quantityException") && (number < 1 || number > maxOrderQuantity)) {
-            throw new IllegalArgumentException("[ERROR] 주문 수량은 1보다 크고 20보다 작아야 합니다.");
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         }
     }
 
     private static IllegalArgumentException checkNumberFormatException(String validationContext) {
         if (validationContext.equals("dateException")) {
-            return new IllegalArgumentException("[ERROR] 정수만 입력하세요.");
+            return new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         } else if (validationContext.equals("quantityException")) {
             return new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         }
-        return new IllegalArgumentException("[ERROR] 잘못된 입력입니다.");
+        return new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
     }
 
 
+
+    public static boolean isTotalQuantityExceeded(List<OrderHistory> orders) {
+        int totalQuantity = orders.stream()
+                .mapToInt(OrderHistory::getOrderQuantity)
+                .sum();
+        return totalQuantity > maxOrderQuantity;
+    }
 
     public static boolean isGiftEvent(List<OrderHistory> orders) {
         int totalBeforeDiscount = orders.stream()
@@ -43,5 +50,4 @@ public class Utils {
                 .sum();
         return totalBeforeDiscount >= giftEventStandardPrice;
     }
-
 }

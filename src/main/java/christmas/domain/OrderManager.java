@@ -42,9 +42,7 @@ public class OrderManager {
                 .mapToInt(OrderHistory::calculateBeforeDiscountPrice)
                 .sum();
 
-        if (totalBeforeDiscount >= saleBeginPrice) {
-            discounts = calculateDiscount(day, orderDate, orders);
-        }
+        if (totalBeforeDiscount >= saleBeginPrice) { discounts = calculateDiscount(day, orderDate, orders); }
 
         return createOrderResult(discounts, isGiftEvent);
     }
